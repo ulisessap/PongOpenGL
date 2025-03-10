@@ -4,6 +4,7 @@
 #include <GL/glut.h> //the glut file for windows operations
                      // it also includes gl.h and glu.h for the openGL library calls
 #include <math.h>
+#include <cstdio>
 
 #define PI 3.1415926535898 
 
@@ -23,6 +24,27 @@ GLfloat T[16] = {1.,0.,0.,0.,\
                  0., 1., 0., 0.,\
                  0.,0.,1.,0.,\
                  0.,0.,0.,1.};
+
+
+//Raquetas
+float raquetaIzq_x = 10, raquetaIzq_y = 50; 
+float raquetaDer_x = 140, raquetaDer_y = 50;
+
+const float raqueta_width = 10;
+const float raqueta_height = 40;
+
+
+//Funcion que dibuja las raquetas
+void draw_paddle(float x, float y) {
+    glColor3f(1.0, 1.0, 1.0); 
+    glBegin(GL_QUADS);
+        glVertex2f(x, y);
+        glVertex2f(x + raqueta_width, y);
+        glVertex2f(x + raqueta_width, y + raqueta_height);
+        glVertex2f(x, y + raqueta_height);
+    glEnd();
+}
+
 
 
 
@@ -118,7 +140,22 @@ void Display(void)
   glMultMatrixf(T1);
   
   draw_ball();
+
+
+   // Llamada a la funcion para dibujar las raquetas
+  glLoadIdentity(); 
+  draw_paddle(raquetaIzq_x, raquetaIzq_y);
+  
+  glLoadIdentity(); 
+  draw_paddle(raquetaDer_x, raquetaDer_y);
+
   glutPostRedisplay(); 
+
+  //Prints para debuggear la posicion de la pelota
+  printf("Pelota esta en -> xpos: %.2f, ypos: %.2f\n", xpos, ypos);
+  printf("Raqueta Izq esta en -> x: %.2f, y: %.2f\n", raquetaIzq_x, raquetaIzq_y);
+  printf("Raqueta Der esta en -> x: %.2f, y: %.2f\n", raquetaDer_x, raquetaDer_y);
+
 
   
 
@@ -127,7 +164,8 @@ void Display(void)
 
 void reshape (int w, int h)
 {
-   // on reshape and on startup, keep the viewport to be the entire size of the window
+  /*
+  // on reshape and on startup, keep the viewport to be the entire size of the window
    glViewport (0, 0, (GLsizei) w, (GLsizei) h);
    glMatrixMode (GL_PROJECTION);
    glLoadIdentity ();
@@ -138,6 +176,17 @@ void reshape (int w, int h)
 
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity ();
+  */
+   glViewport(0, 0, w, h);
+   glMatrixMode(GL_PROJECTION);
+   glLoadIdentity();
+   gluOrtho2D(0.0, w, 0.0, h);  // Ajustar al tamaño real
+   glMatrixMode(GL_MODELVIEW);
+   glLoadIdentity();
+
+   // Recalcular posiciones si la ventana cambia de tamaño
+   
+   
 
 }
 
@@ -148,14 +197,29 @@ void init(void){
   // initial position set to 0,0
 
   //Cambio para la posicion de la pelota 
-  int with = glutGet(GLUT_WINDOW_WIDTH);
+  int width = glutGet(GLUT_WINDOW_WIDTH);
   int height = glutGet(GLUT_WINDOW_HEIGHT);
-
-  xpos = 60; 
+/*
+xpos = 60; 
   ypos = RadiusOfBall; 
   xdir = 1; ydir = 1;
   sx = 1.; sy = 1.; squash = 0.9;
   rot = 0; 
+*/
+  xpos = width / 2.0;  // 
+  ypos = height / 2.0; // 
+
+  xdir = 1; ydir = 1;
+  sx = 1.; sy = 1.; squash = 0.9;
+  rot = 0;
+
+  // Ajustar las posiciones de las raquetas
+  raquetaIzq_x = 20;
+  raquetaIzq_y = height / 2.0 - raqueta_height / 2.0;
+
+  raquetaDer_x = width - 20 - raqueta_width;
+  raquetaDer_y = height / 2.0 - raqueta_height / 2.0;
+  
 
 }
 
