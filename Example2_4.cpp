@@ -36,7 +36,7 @@ const float raqueta_height = 40;
 
 //Funcion que dibuja las raquetas
 void draw_paddle(float x, float y) {
-    glColor3f(1.0, 1.0, 1.0); 
+    glColor3f(0.0, 0.0, 0.0); 
     glBegin(GL_QUADS);
         glVertex2f(x, y);
         glVertex2f(x + raqueta_width, y);
@@ -193,7 +193,7 @@ void reshape (int w, int h)
 
 void init(void){
   //set the clear color to be white
-  glClearColor(0.0,0.8,0.0,1.0);
+  glClearColor(1.0, 1.0, 0.0, 1.0);
   // initial position set to 0,0
 
   //Cambio para la posicion de la pelota 
