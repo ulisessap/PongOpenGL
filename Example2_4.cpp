@@ -78,7 +78,12 @@ void Display(void)
   glClear(GL_COLOR_BUFFER_BIT);
   // 160 is max X value in our world
 	// Define X position of the ball to be at center of window
-	xpos = 80.;
+
+  int width = glutGet(GLUT_WINDOW_WIDTH);
+  int height = glutGet(GLUT_WINDOW_HEIGHT);
+
+	xpos += xdir * 3.0;
+  ypos += ydir * 3.0 - (1.0 - sy) * RadiusOfBall;
  	
 	// Shape has hit the ground! Stop moving and start squashing down and then back up 
 	if (ypos == RadiusOfBall && ydir == -1  ) { 
@@ -95,17 +100,30 @@ void Display(void)
 		}
 		sx = 1./sy;
 	} 
-	// 120 is max Y value in our world
-	// set Y position to increment 1.5 times the direction of the bounce
-	else {
-	ypos = ypos+ydir *1.5 - (1.-sy)*RadiusOfBall;
-	// If ball touches the top, change direction of ball downwards
-  	if (ypos == 120-RadiusOfBall)
-    	ydir = -1;
-	// If ball touches the bottom, change direction of ball upwards
-  	else if (ypos <RadiusOfBall)
-		ydir = 1;
-	}
+
+  //Colision con la parte superior
+  if (ypos + RadiusOfBall >= height) {
+    ydir = -1;  
+    sy = 0.8;   
+    squash = 1.1;
+  }
+
+  //Colisiones en la izquierda y derecha
+  if (xpos - RadiusOfBall <= 0 || xpos + RadiusOfBall >= width) {
+    xdir *= -1; 
+    sx = 0.8;   
+    squash = 1.1;
+}
+
+//Escala de la pelota despues del squash
+if (sx < 1.0) {
+    sx *= squash;
+    if (sx > 1.0) {
+        sx = 1.0;
+        squash = 0.9;
+    }
+}
+
   
 /*  //reset transformation state 
   glLoadIdentity();
@@ -153,8 +171,8 @@ void Display(void)
 
   //Prints para debuggear la posicion de la pelota
   printf("Pelota esta en -> xpos: %.2f, ypos: %.2f\n", xpos, ypos);
-  printf("Raqueta Izq esta en -> x: %.2f, y: %.2f\n", raquetaIzq_x, raquetaIzq_y);
-  printf("Raqueta Der esta en -> x: %.2f, y: %.2f\n", raquetaDer_x, raquetaDer_y);
+  //printf("Raqueta Izq esta en -> x: %.2f, y: %.2f\n", raquetaIzq_x, raquetaIzq_y);
+  //printf("Raqueta Der esta en -> x: %.2f, y: %.2f\n", raquetaDer_x, raquetaDer_y);
 
 
   
