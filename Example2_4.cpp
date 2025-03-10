@@ -86,7 +86,7 @@ void Display(void)
   ypos += ydir * 3.0 - (1.0 - sy) * RadiusOfBall;
  	
 	// Shape has hit the ground! Stop moving and start squashing down and then back up 
-	if (ypos == RadiusOfBall && ydir == -1  ) { 
+	if (ypos <= RadiusOfBall && ydir == -1  ) { 
 		sy = sy*squash ; 
 		
 		if (sy < 0.8)
