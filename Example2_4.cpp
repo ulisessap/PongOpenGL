@@ -133,7 +133,9 @@ void reshape (int w, int h)
    glLoadIdentity ();
 
    // keep our logical coordinate system constant
-   gluOrtho2D(0.0, 160.0, 0.0, 120.0);
+   //gluOrtho2D(0.0, 160.0, 0.0, 120.0);
+   gluOrtho2D(0.0, 160.0 * (1280.0 / 320.0), 0.0, 120.0 * (720.0 / 240.0));
+
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity ();
 
@@ -144,7 +146,14 @@ void init(void){
   //set the clear color to be white
   glClearColor(0.0,0.8,0.0,1.0);
   // initial position set to 0,0
-  xpos = 60; ypos = RadiusOfBall; xdir = 1; ydir = 1;
+
+  //Cambio para la posicion de la pelota 
+  int with = glutGet(GLUT_WINDOW_WIDTH);
+  int height = glutGet(GLUT_WINDOW_HEIGHT);
+
+  xpos = 60; 
+  ypos = RadiusOfBall; 
+  xdir = 1; ydir = 1;
   sx = 1.; sy = 1.; squash = 0.9;
   rot = 0; 
 
@@ -156,7 +165,7 @@ int main(int argc, char* argv[])
 
   glutInit( & argc, argv );
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-  glutInitWindowSize (320, 240);   
+  glutInitWindowSize (1280, 720);   
   glutCreateWindow("Bouncing Ball");
   init();
   glutDisplayFunc(Display);
