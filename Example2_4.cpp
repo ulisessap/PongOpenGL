@@ -30,8 +30,9 @@ GLfloat T[16] = {1.,0.,0.,0.,\
 float raquetaIzq_x = 10, raquetaIzq_y = 50; 
 float raquetaDer_x = 140, raquetaDer_y = 50;
 
-const float raqueta_width = 10;
-const float raqueta_height = 40;
+//Tamaño de las raquetas
+const float raqueta_width = 15;
+const float raqueta_height = 80;
 
 
 //Funcion que dibuja las raquetas
@@ -82,8 +83,8 @@ void Display(void)
   int width = glutGet(GLUT_WINDOW_WIDTH);
   int height = glutGet(GLUT_WINDOW_HEIGHT);
 
-	xpos += xdir * 3.0;
-  ypos += ydir * 3.0 - (1.0 - sy) * RadiusOfBall;
+	xpos += xdir * 2.0;
+  ypos += ydir * 2.0 - (1.0 - sy) * RadiusOfBall;
  	
 	// Shape has hit the ground! Stop moving and start squashing down and then back up 
 	if (ypos <= RadiusOfBall && ydir == -1  ) { 
@@ -122,6 +123,16 @@ if (sx < 1.0) {
         sx = 1.0;
         squash = 0.9;
     }
+}
+
+// Colisión raqueta izquierda
+if (xpos - RadiusOfBall <= raquetaIzq_x + raqueta_width && ypos >= raquetaIzq_y && ypos <= raquetaIzq_y + raqueta_height) {
+    xdir = 1; 
+}
+
+// Colisión con la raqueta derecha
+if (xpos + RadiusOfBall >= raquetaDer_x && ypos >= raquetaDer_y && ypos <= raquetaDer_y + raqueta_height) {
+    xdir = -1;
 }
 
   
@@ -171,12 +182,39 @@ if (sx < 1.0) {
 
   //Prints para debuggear la posicion de la pelota
   printf("Pelota esta en -> xpos: %.2f, ypos: %.2f\n", xpos, ypos);
-  //printf("Raqueta Izq esta en -> x: %.2f, y: %.2f\n", raquetaIzq_x, raquetaIzq_y);
-  //printf("Raqueta Der esta en -> x: %.2f, y: %.2f\n", raquetaDer_x, raquetaDer_y);
+  printf("Raqueta Izq esta en -> x: %.2f, y: %.2f\n", raquetaIzq_x, raquetaIzq_y);
+  printf("Raqueta Der esta en -> x: %.2f, y: %.2f\n", raquetaDer_x, raquetaDer_y);
 
 
   
 
+}
+
+
+void keyboard(unsigned char key, int x, int y) {
+    int vel = 25; 
+
+    switch (key) {
+      //Controles de la raqueta izq
+        case 'w': 
+            if (raquetaIzq_y + raqueta_height < glutGet(GLUT_WINDOW_HEIGHT))
+                raquetaIzq_y += vel;
+            break;
+        case 's': 
+            if (raquetaIzq_y > 0)
+                raquetaIzq_y -= vel;
+            break;
+
+        //Controles raqueta der
+        case 'o': 
+            if (raquetaDer_y + raqueta_height < glutGet(GLUT_WINDOW_HEIGHT))
+                raquetaDer_y += vel;
+            break;
+        case 'l': 
+            if (raquetaDer_y > 0)
+                raquetaDer_y -= vel;
+            break;
+    }
 }
 
 
@@ -198,11 +236,11 @@ void reshape (int w, int h)
    glViewport(0, 0, w, h);
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
-   gluOrtho2D(0.0, w, 0.0, h);  // Ajustar al tamaño real
+   gluOrtho2D(0.0, w, 0.0, h); 
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
 
-   // Recalcular posiciones si la ventana cambia de tamaño
+  
    
    
 
@@ -217,13 +255,7 @@ void init(void){
   //Cambio para la posicion de la pelota 
   int width = glutGet(GLUT_WINDOW_WIDTH);
   int height = glutGet(GLUT_WINDOW_HEIGHT);
-/*
-xpos = 60; 
-  ypos = RadiusOfBall; 
-  xdir = 1; ydir = 1;
-  sx = 1.; sy = 1.; squash = 0.9;
-  rot = 0; 
-*/
+
   xpos = width / 2.0;  // 
   ypos = height / 2.0; // 
 
@@ -231,7 +263,7 @@ xpos = 60;
   sx = 1.; sy = 1.; squash = 0.9;
   rot = 0;
 
-  // Ajustar las posiciones de las raquetas
+  // Posiciones de las raquetas
   raquetaIzq_x = 20;
   raquetaIzq_y = height / 2.0 - raqueta_height / 2.0;
 
@@ -252,6 +284,7 @@ int main(int argc, char* argv[])
   init();
   glutDisplayFunc(Display);
   glutReshapeFunc(reshape);
+  glutKeyboardFunc(keyboard);
   glutMainLoop();
 
   return 1;
