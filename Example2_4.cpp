@@ -35,6 +35,11 @@ const float raqueta_width = 15;
 const float raqueta_height = 80;
 
 
+int puntJugadorIzq = 0;
+int puntJugadorDer = 0;
+
+
+
 //Funcion que dibuja las raquetas
 void draw_paddle(float x, float y) {
     glColor3f(0.0, 0.0, 0.0); 
@@ -135,6 +140,23 @@ if (xpos + RadiusOfBall >= raquetaDer_x && ypos >= raquetaDer_y && ypos <= raque
     xdir = -1;
 }
 
+
+// Si la pelota toca el borde de la izquierda, el jugador derecho gana un punto
+if (xpos - RadiusOfBall <= 0) {
+    puntJugadorDer++;
+
+    printf("Puntos jugador 2: %d\n" , puntJugadorDer);
+    
+}
+
+// Si la pelota toca el borde de la derecha, el jugador izquierdo gana un punto
+if (xpos + RadiusOfBall >= glutGet(GLUT_WINDOW_WIDTH)) {
+    puntJugadorIzq++;
+
+    printf("Puntos jugador 1: %d\n" , puntJugadorIzq);
+    
+}
+
   
 /*  //reset transformation state 
   glLoadIdentity();
@@ -181,9 +203,9 @@ if (xpos + RadiusOfBall >= raquetaDer_x && ypos >= raquetaDer_y && ypos <= raque
   glutPostRedisplay(); 
 
   //Prints para debuggear la posicion de la pelota
-  printf("Pelota esta en -> xpos: %.2f, ypos: %.2f\n", xpos, ypos);
-  printf("Raqueta Izq esta en -> x: %.2f, y: %.2f\n", raquetaIzq_x, raquetaIzq_y);
-  printf("Raqueta Der esta en -> x: %.2f, y: %.2f\n", raquetaDer_x, raquetaDer_y);
+  //printf("Pelota esta en -> xpos: %.2f, ypos: %.2f\n", xpos, ypos);
+  //printf("Raqueta Izq esta en -> x: %.2f, y: %.2f\n", raquetaIzq_x, raquetaIzq_y);
+  //printf("Raqueta Der esta en -> x: %.2f, y: %.2f\n", raquetaDer_x, raquetaDer_y);
 
 
   
