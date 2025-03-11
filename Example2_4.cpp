@@ -88,7 +88,7 @@ void Display(void)
   int width = glutGet(GLUT_WINDOW_WIDTH);
   int height = glutGet(GLUT_WINDOW_HEIGHT);
 
-	xpos += xdir * 2.0;
+	xpos += xdir * 3.0;
   ypos += ydir * 2.0 - (1.0 - sy) * RadiusOfBall;
  	
 	// Shape has hit the ground! Stop moving and start squashing down and then back up 
@@ -119,61 +119,44 @@ void Display(void)
     xdir *= -1; 
     sx = 0.8;   
     squash = 1.1;
-}
+  }
 
-//Escala de la pelota despues del squash
-if (sx < 1.0) {
-    sx *= squash;
-    if (sx > 1.0) {
-        sx = 1.0;
-        squash = 0.9;
-    }
-}
+  //Escala de la pelota despues del squash
+  if (sx < 1.0) {
+      sx *= squash;
+      if (sx > 1.0) {
+          sx = 1.0;
+          squash = 0.9;
+      }
+  }
 
-// Colisión raqueta izquierda
-if (xpos - RadiusOfBall <= raquetaIzq_x + raqueta_width && ypos >= raquetaIzq_y && ypos <= raquetaIzq_y + raqueta_height) {
-    xdir = 1; 
-}
+  // Colisión raqueta izquierda
+  if (xpos - RadiusOfBall <= raquetaIzq_x + raqueta_width &&  ypos + RadiusOfBall >= raquetaIzq_y &&  ypos - RadiusOfBall <= raquetaIzq_y + raqueta_height) {
+      xdir = 1;  
+  }
 
-// Colisión con la raqueta derecha
-if (xpos + RadiusOfBall >= raquetaDer_x && ypos >= raquetaDer_y && ypos <= raquetaDer_y + raqueta_height) {
-    xdir = -1;
-}
+  // Colisión con la raqueta derecha
+  if (xpos + RadiusOfBall >= raquetaDer_x &&  ypos + RadiusOfBall >= raquetaDer_y &&  ypos - RadiusOfBall <= raquetaDer_y + raqueta_height) {
+      xdir = -1;
+  }
 
 
-// Si la pelota toca el borde de la izquierda, el jugador derecho gana un punto
-if (xpos - RadiusOfBall <= 0) {
-    puntJugadorDer++;
+  // Si la pelota toca el borde de la izquierda, el jugador derecho gana un punto
+  if (xpos - RadiusOfBall <= 0) {
+      puntJugadorDer++;
 
-    printf("Puntos jugador 2: %d\n" , puntJugadorDer);
-    
-}
+      printf("Puntos jugador 2: %d\n" , puntJugadorDer);
+      
+  }
 
-// Si la pelota toca el borde de la derecha, el jugador izquierdo gana un punto
-if (xpos + RadiusOfBall >= glutGet(GLUT_WINDOW_WIDTH)) {
-    puntJugadorIzq++;
+  // Si la pelota toca el borde de la derecha, el jugador izquierdo gana un punto
+  if (xpos + RadiusOfBall >= glutGet(GLUT_WINDOW_WIDTH)) {
+      puntJugadorIzq++;
 
-    printf("Puntos jugador 1: %d\n" , puntJugadorIzq);
-    
-}
+      printf("Puntos jugador 1: %d\n" , puntJugadorIzq);
+      
+  }
 
-  
-/*  //reset transformation state 
-  glLoadIdentity();
-  
-  // apply translation
-  glTranslatef(xpos,ypos, 0.);
-
-  // Translate ball back to center
-  glTranslatef(0.,-RadiusOfBall, 0.);
-  // Scale the ball about its bottom
-  glScalef(sx,sy, 1.);
-  // Translate ball up so bottom is at the origin
-  glTranslatef(0.,RadiusOfBall, 0.);
-  // draw the ball
-  draw_ball();
-*/
- 
   //Translate the bouncing ball to its new position
   T[12]= xpos;
   T[13] = ypos;
@@ -193,7 +176,7 @@ if (xpos + RadiusOfBall >= glutGet(GLUT_WINDOW_WIDTH)) {
   draw_ball();
 
 
-   // Llamada a la funcion para dibujar las raquetas
+  // Llamada a la funcion para dibujar las raquetas
   glLoadIdentity(); 
   draw_paddle(raquetaIzq_x, raquetaIzq_y);
   
@@ -206,9 +189,7 @@ if (xpos + RadiusOfBall >= glutGet(GLUT_WINDOW_WIDTH)) {
   //printf("Pelota esta en -> xpos: %.2f, ypos: %.2f\n", xpos, ypos);
   //printf("Raqueta Izq esta en -> x: %.2f, y: %.2f\n", raquetaIzq_x, raquetaIzq_y);
   //printf("Raqueta Der esta en -> x: %.2f, y: %.2f\n", raquetaDer_x, raquetaDer_y);
-
-
-  
+ 
 
 }
 
@@ -270,16 +251,15 @@ void reshape (int w, int h)
 
 
 void init(void){
-  //set the clear color to be white
+
   glClearColor(1.0, 1.0, 0.0, 1.0);
-  // initial position set to 0,0
 
   //Cambio para la posicion de la pelota 
   int width = glutGet(GLUT_WINDOW_WIDTH);
   int height = glutGet(GLUT_WINDOW_HEIGHT);
 
-  xpos = width / 2.0;  // 
-  ypos = height / 2.0; // 
+  xpos = width / 2.0;  
+  ypos = height / 2.0;  
 
   xdir = 1; ydir = 1;
   sx = 1.; sy = 1.; squash = 0.9;
