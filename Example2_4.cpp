@@ -38,22 +38,6 @@ const float raqueta_height = 80;
 int puntJugadorIzq = 0;
 int puntJugadorDer = 0;
 
-
-
-//Funcion que dibuja las raquetas
-void draw_paddle(float x, float y) {
-    glColor3f(0.0, 0.0, 0.0); 
-    glBegin(GL_QUADS);
-        glVertex2f(x, y);
-        glVertex2f(x + raqueta_width, y);
-        glVertex2f(x + raqueta_width, y + raqueta_height);
-        glVertex2f(x, y + raqueta_height);
-    glEnd();
-}
-
-
-
-
 #define PI 3.1415926535898 
 GLint circle_points = 100; 
 void MyCircle2f(GLfloat centerx, GLfloat centery, GLfloat radius){
@@ -68,11 +52,30 @@ void MyCircle2f(GLfloat centerx, GLfloat centery, GLfloat radius){
 }
 
 GLfloat RadiusOfBall = 15.;
+
+
+//Funcion que dibuja las raquetas
+void draw_paddle(float x, float y) {
+    glColor3f(0.0, 0.0, 0.0); 
+    glBegin(GL_QUADS);
+        glVertex2f(x, y);
+        glVertex2f(x + raqueta_width, y);
+        glVertex2f(x + raqueta_width, y + raqueta_height);
+        glVertex2f(x, y + raqueta_height);
+    glEnd();
+}
+
 // Draw the ball, centered at the origin
 void draw_ball() {
   glColor3f(0.6,0.3,0.);
   MyCircle2f(0.,0.,RadiusOfBall);
   
+}
+
+//Funcion que pone la pelota en el centro de la pantalla
+void resetBall() {
+    xpos = glutGet(GLUT_WINDOW_WIDTH) / 2.0;
+    ypos = glutGet(GLUT_WINDOW_HEIGHT) / 2.0;
 }
 
 void Display(void)
@@ -92,7 +95,7 @@ void Display(void)
   ypos += ydir * 2.0 - (1.0 - sy) * RadiusOfBall;
  	
 	// Shape has hit the ground! Stop moving and start squashing down and then back up 
-	if (ypos <= RadiusOfBall && ydir == -1  ) { 
+	if (ypos <= RadiusOfBall && ydir == -1  ){ 
 		sy = sy*squash ; 
 		
 		if (sy < 0.8)
@@ -108,21 +111,21 @@ void Display(void)
 	} 
 
   //Colision con la parte superior
-  if (ypos + RadiusOfBall >= height) {
+  if (ypos + RadiusOfBall >= height){
     ydir = -1;  
     sy = 0.8;   
     squash = 1.1;
   }
 
   //Colisiones en la izquierda y derecha
-  if (xpos - RadiusOfBall <= 0 || xpos + RadiusOfBall >= width) {
+  if (xpos - RadiusOfBall <= 0 || xpos + RadiusOfBall >= width){
     xdir *= -1; 
     sx = 0.8;   
     squash = 1.1;
   }
 
   //Escala de la pelota despues del squash
-  if (sx < 1.0) {
+  if (sx < 1.0){
       sx *= squash;
       if (sx > 1.0) {
           sx = 1.0;
@@ -142,18 +145,20 @@ void Display(void)
 
 
   // Si la pelota toca el borde de la izquierda, el jugador derecho gana un punto
-  if (xpos - RadiusOfBall <= 0) {
+  if (xpos - RadiusOfBall <= 0){
       puntJugadorDer++;
 
       printf("Puntos jugador 2: %d\n" , puntJugadorDer);
+      resetBall();
       
   }
 
   // Si la pelota toca el borde de la derecha, el jugador izquierdo gana un punto
-  if (xpos + RadiusOfBall >= glutGet(GLUT_WINDOW_WIDTH)) {
+  if (xpos + RadiusOfBall >= glutGet(GLUT_WINDOW_WIDTH)){
       puntJugadorIzq++;
 
       printf("Puntos jugador 1: %d\n" , puntJugadorIzq);
+      resetBall();
       
   }
 
@@ -194,7 +199,7 @@ void Display(void)
 }
 
 
-void keyboard(unsigned char key, int x, int y) {
+void keyboard(unsigned char key, int x, int y){
     int vel = 25; 
 
     switch (key) {
@@ -242,11 +247,6 @@ void reshape (int w, int h)
    gluOrtho2D(0.0, w, 0.0, h); 
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
-
-  
-   
-   
-
 }
 
 
