@@ -12,6 +12,19 @@ double xpos, ypos, ydir, xdir;         // x and y position for house to be drawn
 double sx, sy, squash;          // xy scale factors
 double rot, rdir;             // rotation 
 int SPEED = 50;        // speed of timer call back in msecs
+
+//Raquetas
+float raquetaIzq_x = 10, raquetaIzq_y = 50; 
+float raquetaDer_x = 140, raquetaDer_y = 50;
+
+//Tamaño de las raquetas
+const float raqueta_width = 15;
+const float raqueta_height = 80;
+
+//Puntuacion de los jugadores
+int puntJugadorIzq = 0;
+int puntJugadorDer = 0;
+
 GLfloat T1[16] = {1.,0.,0.,0.,\
                   0.,1.,0.,0.,\
                   0.,0.,1.,0.,\
@@ -25,18 +38,6 @@ GLfloat T[16] = {1.,0.,0.,0.,\
                  0.,0.,1.,0.,\
                  0.,0.,0.,1.};
 
-
-//Raquetas
-float raquetaIzq_x = 10, raquetaIzq_y = 50; 
-float raquetaDer_x = 140, raquetaDer_y = 50;
-
-//Tamaño de las raquetas
-const float raqueta_width = 15;
-const float raqueta_height = 80;
-
-
-int puntJugadorIzq = 0;
-int puntJugadorDer = 0;
 
 #define PI 3.1415926535898 
 GLint circle_points = 100; 
@@ -189,7 +190,6 @@ void Display(void)
   
   draw_ball();
 
-
   // Llamada a la funcion para dibujar las raquetas
   glLoadIdentity(); 
   draw_paddle(raquetaIzq_x, raquetaIzq_y);
@@ -203,13 +203,6 @@ void Display(void)
   drawText(glutGet(GLUT_WINDOW_WIDTH) / 2 - 100, glutGet(GLUT_WINDOW_HEIGHT) - 30, puntuacion);
 
   glutPostRedisplay(); 
-
-  //Prints para debuggear la posicion de la pelota
-  //printf("Pelota esta en -> xpos: %.2f, ypos: %.2f\n", xpos, ypos);
-  //printf("Raqueta Izq esta en -> x: %.2f, y: %.2f\n", raquetaIzq_x, raquetaIzq_y);
-  //printf("Raqueta Der esta en -> x: %.2f, y: %.2f\n", raquetaDer_x, raquetaDer_y);
- 
-
 }
 
 
@@ -240,21 +233,7 @@ void keyboard(unsigned char key, int x, int y){
 }
 
 
-void reshape (int w, int h)
-{
-  /*
-  // on reshape and on startup, keep the viewport to be the entire size of the window
-   glViewport (0, 0, (GLsizei) w, (GLsizei) h);
-   glMatrixMode (GL_PROJECTION);
-   glLoadIdentity ();
-
-   // keep our logical coordinate system constant
-   //gluOrtho2D(0.0, 160.0, 0.0, 120.0);
-   gluOrtho2D(0.0, 160.0 * (1280.0 / 320.0), 0.0, 120.0 * (720.0 / 240.0));
-
-   glMatrixMode(GL_MODELVIEW);
-   glLoadIdentity ();
-  */
+void reshape (int w, int h){
    glViewport(0, 0, w, h);
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
