@@ -78,6 +78,15 @@ void resetBall() {
     ypos = glutGet(GLUT_WINDOW_HEIGHT) / 2.0;
 }
 
+//Funcion que despliega texto en la pantalla de juego
+void drawText(float x, float y, char *text) {
+    glRasterPos2f(x, y);
+    while (*text) {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *text);
+        text++;
+    }
+}
+
 void Display(void)
 {
   // swap the buffers
@@ -187,6 +196,11 @@ void Display(void)
   
   glLoadIdentity(); 
   draw_paddle(raquetaDer_x, raquetaDer_y);
+
+  char puntuacion[50];
+  sprintf(puntuacion, "Jugador 1: %d  Jugador 2: %d", puntJugadorIzq, puntJugadorDer);
+  glColor3f(0, 0, 0);
+  drawText(glutGet(GLUT_WINDOW_WIDTH) / 2 - 100, glutGet(GLUT_WINDOW_HEIGHT) - 30, puntuacion);
 
   glutPostRedisplay(); 
 
